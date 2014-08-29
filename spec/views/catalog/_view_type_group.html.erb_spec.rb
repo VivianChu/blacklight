@@ -7,15 +7,17 @@ describe "catalog/_view_type_group" do
   end
 
   before do
-    view.stub(blacklight_config: blacklight_config)
+    allow(view).to receive_messages(how_sort_and_per_page?: true, blacklight_config: blacklight_config)
   end
 
   it "should not display the group when there's only one option" do
+    assign(:response, [])
     render partial: 'catalog/view_type_group'
     expect(rendered).to be_empty
   end
 
   it "should display the group" do
+    assign(:response, [double])
     blacklight_config.configure do |config|
       config.view.delete(:list)
       config.view.a 
@@ -31,6 +33,7 @@ describe "catalog/_view_type_group" do
 
 
   it "should set the current view to 'active'" do
+    assign(:response, [double])
     blacklight_config.configure do |config|
       config.view.delete(:list)
       config.view.a 

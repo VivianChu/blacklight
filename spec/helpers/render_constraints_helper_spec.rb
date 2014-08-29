@@ -11,14 +11,19 @@ describe RenderConstraintsHelper do
   before do
     # the helper methods below infer paths from the current route
     controller.request.path_parameters["controller"] = 'catalog'
-    helper.stub(:search_action_path) do |*args|
+    allow(helper).to receive(:search_action_path) do |*args|
       catalog_index_path *args
     end
   end
 
   describe '#render_constraints_query' do
+    let(:my_engine) { double("Engine") }
     it "should have a link relative to the current url" do
       expect(helper.render_constraints_query(:q=>'foobar', :f=>{:type=>'journal'})).to have_selector "a[href='/?f%5Btype%5D=journal']"
+    end
+    it "should accept an optional route set" do
+      expect(my_engine).to receive(:url_for).and_return('/?f%5Btype%5D=journal')
+      expect(helper.render_constraints_query(:q=>'foobar', :f=>{:type=>'journal'}, :route_set => my_engine)).to have_selector "a[href='/?f%5Btype%5D=journal']"
     end
   end
 
