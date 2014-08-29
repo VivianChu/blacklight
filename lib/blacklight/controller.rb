@@ -142,6 +142,7 @@ module Blacklight::Controller
       redirect_to new_user_session_url(:referer => request.fullpath)
     end
 
+    public
     def url_for(options = nil)
       array_params= []
      
